@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Yoto Icon Builder</title>
+  <meta name="description" content="Draw 16×16 pixel icons for Yoto Make Your Own cards.">
+  <meta name="theme-color" content="#ff6b4a">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' rx='3' fill='%23ff6b4a'/><rect x='4' y='4' width='3' height='3' fill='%23fff'/><rect x='9' y='4' width='3' height='3' fill='%23fff'/><rect x='4' y='10' width='8' height='2' fill='%23fff'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1><span class="logo" aria-hidden="true"></span>Yoto Icon Builder</h1>
+    <p class="tagline">Draw a 16 × 16 pixel icon for your Make Your Own card</p>
+  </header>
+
+  <main class="app">
+    <section class="title-bar" aria-label="Song title">
+      <label for="title" class="title-label">🎵 Song title</label>
+      <div class="title-row">
+        <input id="title" type="text" maxlength="80" placeholder="e.g. Twinkle Twinkle" autocomplete="off">
+        <button id="btn-save" class="btn btn-primary" type="button">💾 Save</button>
+        <button id="btn-new" class="btn" type="button">✨ New</button>
+      </div>
+      <p id="save-status" class="save-status" aria-live="polite"></p>
+    </section>
+
+    <section class="tools" aria-label="Tools">
+      <div class="tool-group" role="radiogroup" aria-label="Drawing tool">
+        <button class="tool active" data-tool="pencil" role="radio" aria-checked="true" title="Pencil (B)"><span aria-hidden="true">✏️</span>Draw</button>
+        <button class="tool" data-tool="eraser" role="radio" aria-checked="false" title="Eraser (E)"><span aria-hidden="true">🧽</span>Erase</button>
+        <button class="tool" data-tool="fill" role="radio" aria-checked="false" title="Fill (F)"><span aria-hidden="true">🪣</span>Fill</button>
+        <button class="tool" data-tool="picker" role="radio" aria-checked="false" title="Pick a colour from the drawing (I)"><span aria-hidden="true">🎯</span>Pick</button>
+      </div>
+      <div class="tool-group">
+        <button id="btn-undo" class="tool" type="button" title="Undo (Ctrl+Z)"><span aria-hidden="true">↩️</span>Undo</button>
+        <button id="btn-redo" class="tool" type="button" title="Redo (Ctrl+Y)"><span aria-hidden="true">↪️</span>Redo</button>
+        <button id="btn-grid" class="tool active" type="button" aria-pressed="true" title="Show grid lines"><span aria-hidden="true">#️⃣</span>Grid</button>
+        <button id="btn-clear" class="tool" type="button" title="Clear everything"><span aria-hidden="true">🗑️</span>Clear</button>
+      </div>
+    </section>
+
+    <section class="board" aria-label="Drawing grid">
+      <canvas id="board" aria-label="16 by 16 pixel drawing grid"></canvas>
+    </section>
+
+    <section class="palette-panel" aria-label="Colours">
+      <div class="current-color">
+        <span id="current-swatch" class="current-swatch"></span>
+        <span id="current-name" class="current-name"></span>
+      </div>
+      <div id="palette" class="palette" role="radiogroup" aria-label="Crayola colours"></div>
+    </section>
+
+    <section class="export-panel" aria-label="Preview and download">
+      <div class="preview">
+        <div class="preview-item">
+          <canvas id="preview-big" width="16" height="16" class="preview-canvas big"></canvas>
+          <span>Big</span>
+        </div>
+        <div class="preview-item">
+          <canvas id="preview-real" width="16" height="16" class="preview-canvas real"></canvas>
+          <span>Real size</span>
+        </div>
+      </div>
+      <div class="export-buttons">
+        <button id="btn-download" class="btn btn-primary btn-big" type="button">⬇️ Download icon for Yoto</button>
+        <div class="export-secondary">
+          <button id="btn-download-big" class="btn" type="button">🖼️ Big picture</button>
+          <button id="btn-open" class="btn" type="button">📂 Open PNG</button>
+          <input id="file-open" type="file" accept="image/png,image/*" hidden>
+        </div>
+        <p class="hint">The icon downloads as a 16 × 16 PNG, the size the Yoto app wants for MYO card icons.</p>
+      </div>
+    </section>
+
+    <section class="library" aria-labelledby="library-heading">
+      <div class="library-head">
+        <h2 id="library-heading">⭐ My Icons</h2>
+        <input id="library-search" type="search" placeholder="Find a song…" aria-label="Search saved icons" hidden>
+      </div>
+      <div id="library-list" class="library-list"></div>
+      <p id="library-empty" class="library-empty">No saved icons yet. Type a song title and press <b>Save</b>.</p>
+      <div class="backup-row">
+        <button id="btn-backup" class="btn" type="button">📦 Download backup</button>
+        <button id="btn-restore" class="btn" type="button">♻️ Restore backup</button>
+        <input id="file-restore" type="file" accept="application/json,.json" hidden>
+      </div>
+      <p class="hint">Saved icons live in this browser. Use a backup to move them to another device.</p>
+    </section>
+  </main>
+
+  <dialog id="dialog" class="dialog">
+    <form method="dialog">
+      <p id="dialog-message"></p>
+      <div class="dialog-buttons">
+        <button value="cancel" class="btn" id="dialog-cancel">No</button>
+        <button value="ok" class="btn btn-primary" id="dialog-ok">Yes</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="palette.js"></script>
+  <script src="storage.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
