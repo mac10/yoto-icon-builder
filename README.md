@@ -16,8 +16,8 @@ It's a plain static site: no build step and no dependencies.
 ## Run it locally
 
 ```sh
-python3 -m http.server 8000
-# then open http://localhost:8000
+python3 -m http.server 8765
+# then open http://localhost:8765
 ```
 
 (Opening `index.html` directly also works.)
