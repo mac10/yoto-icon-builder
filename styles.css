@@ -8,8 +8,9 @@
   --accent-ink: #ffffff;
   --accent-soft: #ffe3d9;
   --focus: #1f75fe;
-  --check-a: #f1ece4;
-  --check-b: #ffffff;
+  --empty: #d9d3e2;
+  --grid: rgba(43, 33, 64, 0.45);
+  --grid-mid: rgba(43, 33, 64, 0.8);
   --shadow: 0 4px 0 rgba(43, 33, 64, 0.12);
   --radius: 18px;
   --tap: 48px;
@@ -26,8 +27,9 @@
     --accent: #ff7b5c;
     --accent-ink: #1c1729;
     --accent-soft: #4a2f3a;
-    --check-a: #3a3352;
-    --check-b: #2f2945;
+    --empty: #4a4262;
+    --grid: rgba(15, 11, 24, 0.7);
+    --grid-mid: rgba(5, 3, 10, 0.95);
     --shadow: 0 4px 0 rgba(0, 0, 0, 0.35);
     color-scheme: dark;
   }
@@ -42,8 +44,9 @@
   --accent: #ff7b5c;
   --accent-ink: #1c1729;
   --accent-soft: #4a2f3a;
-  --check-a: #3a3352;
-  --check-b: #2f2945;
+  --empty: #4a4262;
+  --grid: rgba(15, 11, 24, 0.7);
+  --grid-mid: rgba(5, 3, 10, 0.95);
   --shadow: 0 4px 0 rgba(0, 0, 0, 0.35);
   color-scheme: dark;
 }
@@ -204,7 +207,7 @@ button, input { font: inherit; color: inherit; }
   aspect-ratio: 1 / 1;
   border-radius: 12px;
   border: 3px solid var(--ink);
-  background: var(--check-b);
+  background: var(--empty);
   touch-action: none;
   cursor: crosshair;
   display: block;

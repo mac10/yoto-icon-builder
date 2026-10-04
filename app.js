@@ -94,8 +94,9 @@
     const w = board.width;
     const cell = w / SIZE;
     const styles = getComputedStyle(document.documentElement);
-    const checkA = styles.getPropertyValue("--check-a").trim() || "#eee";
-    const checkB = styles.getPropertyValue("--check-b").trim() || "#fff";
+    const emptyColor = styles.getPropertyValue("--empty").trim() || "#d9d3e2";
+    const gridColor = styles.getPropertyValue("--grid").trim() || "rgba(43, 33, 64, 0.45)";
+    const gridMid = styles.getPropertyValue("--grid-mid").trim() || "rgba(43, 33, 64, 0.8)";
 
     ctx.clearRect(0, 0, w, w);
     for (let i = 0; i < CELLS; i++) {
@@ -103,38 +104,24 @@
       const y = Math.floor(i / SIZE) * cell;
       const x0 = Math.round(x), y0 = Math.round(y);
       const x1 = Math.round(x + cell), y1 = Math.round(y + cell);
-      const hex = state.pixels[i];
-      if (hex) {
-        ctx.fillStyle = hex;
-        ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
-      } else {
-        // Checkerboard so kids can see which squares are empty.
-        const xm = Math.round(x + cell / 2), ym = Math.round(y + cell / 2);
-        ctx.fillStyle = checkB;
-        ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
-        ctx.fillStyle = checkA;
-        ctx.fillRect(x0, y0, xm - x0, ym - y0);
-        ctx.fillRect(xm, ym, x1 - xm, y1 - ym);
-      }
+      // Empty (transparent) squares get a plain base colour that isn't any crayon.
+      ctx.fillStyle = state.pixels[i] || emptyColor;
+      ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
     }
 
     if (state.showGrid) {
-      ctx.strokeStyle = "rgba(43, 33, 64, 0.28)";
-      ctx.lineWidth = Math.max(1, Math.round(w / 600));
-      ctx.beginPath();
-      for (let k = 1; k < SIZE; k++) {
-        const p = Math.round(k * cell) + 0.5;
-        ctx.moveTo(p, 0); ctx.lineTo(p, w);
-        ctx.moveTo(0, p); ctx.lineTo(w, p);
-      }
-      ctx.stroke();
-      // Stronger centre lines help with symmetric drawings.
-      ctx.strokeStyle = "rgba(43, 33, 64, 0.5)";
-      ctx.beginPath();
-      const mid = Math.round(8 * cell) + 0.5;
-      ctx.moveTo(mid, 0); ctx.lineTo(mid, w);
-      ctx.moveTo(0, mid); ctx.lineTo(w, mid);
-      ctx.stroke();
+      // Lines are drawn as filled rects so they stay crisp at any pixel ratio.
+      const lw = Math.max(1, Math.round(2 * (window.devicePixelRatio || 1)));
+      const line = (k) => {
+        const p = Math.round(k * cell) - Math.floor(lw / 2);
+        ctx.fillRect(p, 0, lw, w);
+        ctx.fillRect(0, p, w, lw);
+      };
+      ctx.fillStyle = gridColor;
+      for (let k = 1; k < SIZE; k++) if (k !== SIZE / 2) line(k);
+      // Darker centre lines help with symmetric drawings.
+      ctx.fillStyle = gridMid;
+      line(SIZE / 2);
     }
 
     paintSmall($("preview-big"), state.pixels);
