@@ -630,6 +630,39 @@
 
   window.addEventListener("beforeunload", saveWip);
 
+  // ---------- Theme ----------
+
+  const THEME_KEY = "yotoIcons.theme";
+  const THEMES = {
+    auto: { label: "🌗 Auto", next: "light" },
+    light: { label: "☀️ Light", next: "dark" },
+    dark: { label: "🌙 Dark", next: "auto" },
+  };
+
+  function currentTheme() {
+    const t = document.documentElement.dataset.theme;
+    return t === "light" || t === "dark" ? t : "auto";
+  }
+
+  function updateThemeButton() {
+    const t = currentTheme();
+    const btn = $("btn-theme");
+    btn.textContent = THEMES[t].label;
+    btn.setAttribute("aria-label", `Theme: ${t}. Tap to change.`);
+  }
+
+  $("btn-theme").addEventListener("click", () => {
+    const next = THEMES[currentTheme()].next;
+    if (next === "auto") delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = next;
+    try {
+      if (next === "auto") localStorage.removeItem(THEME_KEY);
+      else localStorage.setItem(THEME_KEY, next);
+    } catch {}
+    updateThemeButton();
+    render(); // the board reads its colours from CSS variables
+  });
+
   // ---------- Start ----------
 
   buildPalette();
@@ -651,5 +684,6 @@
 
   new ResizeObserver(resizeBoard).observe(board);
   window.matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", render);
+  updateThemeButton();
   resizeBoard();
 })();

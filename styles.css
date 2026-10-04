@@ -72,8 +72,27 @@ button, input { font: inherit; color: inherit; }
 
 /* Header */
 .app-header {
+  position: relative;
   text-align: center;
   padding: 18px 16px 4px;
+}
+.theme-toggle {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  min-height: 44px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 2px solid var(--line);
+  background: var(--panel);
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  touch-action: manipulation;
+}
+.theme-toggle:active { transform: translateY(3px); box-shadow: none; }
+@media (max-width: 599px) {
+  .app-header { padding-top: 64px; }
 }
 .app-header h1 {
   margin: 0;
@@ -347,19 +366,20 @@ button, input { font: inherit; color: inherit; }
   position: fixed;
   left: 50%;
   bottom: max(20px, env(safe-area-inset-bottom));
-  transform: translate(-50%, 140%);
+  transform: translate(-50%, calc(100% + 40px));
+  visibility: hidden;
   background: var(--ink);
   color: var(--bg);
   padding: 10px 18px;
   border-radius: 999px;
   font-weight: 700;
-  transition: transform 0.25s ease;
+  transition: transform 0.25s ease, visibility 0.25s;
   max-width: calc(100vw - 32px);
   text-align: center;
   pointer-events: none;
   z-index: 10;
 }
-.toast.show { transform: translate(-50%, 0); }
+.toast.show { transform: translate(-50%, 0); visibility: visible; }
 
 @media (max-width: 599px) {
   .title-row input { flex-basis: 100%; }

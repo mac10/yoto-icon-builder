@@ -11,9 +11,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script>
+    // Apply the saved theme before first paint so the page doesn't flash.
+    try {
+      const t = localStorage.getItem("yotoIcons.theme");
+      if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+    } catch {}
+  </script>
 </head>
 <body>
   <header class="app-header">
+    <button id="btn-theme" class="theme-toggle" type="button" title="Change light / dark mode"></button>
     <h1><span class="logo" aria-hidden="true"></span>Yoto Icon Builder</h1>
     <p class="tagline">Draw a 16 × 16 pixel icon for your Make Your Own card</p>
   </header>
